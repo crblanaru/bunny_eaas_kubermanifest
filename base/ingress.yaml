@@ -7,7 +7,7 @@ metadata:
   labels:
     app.bunnyshell.com/is-docker-compose: bns
     app.kubernetes.io/managed-by: Bunnyshell
-  name: n5sv5x-ingress
+  name: lns2fw-ingress
 spec:
   ingressClassName: bns-nginx
   rules:
