@@ -23,8 +23,6 @@ spec:
       containers:
       - envFrom:
         - configMapRef:
-            name: project-variables
-        - configMapRef:
             name: environment-variables
         - configMapRef:
             name: bns-builtin-env-vars
