@@ -1,0 +1,36 @@
+apiVersion: v1
+data:
+  BNS_GIT_BRANCH: main
+kind: ConfigMap
+metadata:
+  labels:
+    app.bunnyshell.com/is-docker-compose: bns
+  name: bns-builtin-api-env-vars
+---
+apiVersion: v1
+data:
+  BNS_GIT_BRANCH: main
+kind: ConfigMap
+metadata:
+  labels:
+    app.bunnyshell.com/is-docker-compose: bns
+  name: bns-builtin-cache-env-vars
+---
+apiVersion: v1
+data:
+  BNS_INGRESS_URL_API_0: api-n5sv5x.bunnyenv.com
+  BNS_INGRESS_URL_CACHE_0: cache-n5sv5x.bunnyenv.com
+kind: ConfigMap
+metadata:
+  labels:
+    app.bunnyshell.com/is-docker-compose: bns
+  name: bns-builtin-env-vars
+---
+apiVersion: v1
+data:
+  PORT: "80"
+kind: ConfigMap
+metadata:
+  labels:
+    app.bunnyshell.com/is-docker-compose: bns
+  name: env-file-api

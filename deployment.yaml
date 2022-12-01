@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.bunnyshell.com/is-docker-compose: bns
+    app.kubernetes.io/instance-api: bns
+    io.kompose.service: api
+  name: api
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance-api: bns
+      io.kompose.service: api
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance-api: bns
+        io.kompose.service: api
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: project-variables
+        - configMapRef:
+            name: environment-variables
+        - configMapRef:
+            name: bns-builtin-env-vars
+        - configMapRef:
+            name: env-file-api
+        - configMapRef:
+            name: bns-builtin-api-env-vars
+        image: bunnyshell/future/build
+        imagePullPolicy: IfNotPresent
+        name: api
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 500m
+            memory: "314572800"
+          requests:
+            cpu: 500m
+            memory: "209715200"
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.bunnyshell.com/is-docker-compose: bns
+    io.kompose.service: api
+  name: api
+spec:
+  ports:
+  - name: "80"
+    port: 80
+    targetPort: 80
+  selector:
+    io.kompose.service: api
+status:
+  loadBalancer: {}
