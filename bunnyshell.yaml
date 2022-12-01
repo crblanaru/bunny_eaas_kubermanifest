@@ -1,0 +1,36 @@
+kind: Environment
+name: api-kmanifest
+type: primary
+components:
+    -
+        kind: DockerImage
+        name: fastapi
+        gitRepo: 'git://github.com/crblanaru/bunny_eaas_kubermanifest.git'
+        gitBranch: main
+        gitApplicationPath: /
+        context: /
+        dockerfile: Dockerfile
+        args:
+            ENV: bunnyshell
+            PORT: 80
+    -
+        kind: KubernetesManifest
+        name: api
+        metadata:
+        gitRepo: 'git://github.com/crblanaru/bunny_eaas_kubermanifest.git'
+        gitBranch: main
+        gitApplicationPath: /
+        runnerImage: 'alpine/k8s:1.22.15'
+        deploy:
+            - 'kustomize create --autodetect --recursive --labels=app.kubernetes.io/instance-my-app:bns,app.kubernetes.io/part-of:env-{{ env.unique }} --namespace {{ env.k8s.namespace }}'
+            - 'kustomize edit set image bunnyshell/future/build={{ components.fastapi.image }}'
+            - 'sed -i "s/api-n5sv5x.bunnyenv.com/api-{{ env.base_domain }}/g" ./base/ingress.yaml'
+            - 'kustomize build'
+            - 'kubectl apply -k .'
+        destroy:
+            - 'kustomize create --autodetect --recursive --namespace {{ env.k8s.namespace }}'
+            - 'kubectl delete -k .'
+        start:
+            - 'kubectl scale --replicas=1 --namespace {{ env.k8s.namespace }} deployment/api'
+        stop:
+            - 'kubectl scale --replicas=0 --namespace {{ env.k8s.namespace }} deployment/api'
