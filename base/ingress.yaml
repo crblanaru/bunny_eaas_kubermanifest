@@ -6,6 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
   labels:
     app.bunnyshell.com/is-docker-compose: bns
+    app.kubernetes.io/managed-by: Bunnyshell
   name: n5sv5x-ingress
 spec:
   ingressClassName: bns-nginx
