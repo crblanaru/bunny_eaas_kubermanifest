@@ -22,7 +22,7 @@ components:
         gitApplicationPath: /
         runnerImage: 'alpine/k8s:1.22.15'
         deploy:
-            - 'kustomize create --autodetect --recursive --labels=app.kubernetes.io/instance-my-app:bns,app.kubernetes.io/part-of:env-{{ env.unique }} --namespace {{ env.k8s.namespace }}'
+            - 'kustomize create --autodetect --recursive --labels=app.kubernetes.io/instance-api:bns,app.kubernetes.io/part-of:env-{{ env.unique }} --namespace {{ env.k8s.namespace }}'
             - 'kustomize edit set image bunnyshell/future/build={{ components.fastapi.image }}'
             - 'sed -i "s/api-n5sv5x.bunnyenv.com/api-{{ env.base_domain }}/g" ./base/ingress.yaml'
             - 'kustomize build'
